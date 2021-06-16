@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 16, 2021 at 12:11 PM
+-- Generation Time: Jun 16, 2021 at 03:03 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -35,6 +35,14 @@ CREATE TABLE `appointment` (
   `id_client` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+--
+-- Dumping data for table `appointment`
+--
+
+INSERT INTO `appointment` (`id_appointment`, `date`, `sujet`, `id_creneaux`, `id_client`) VALUES
+(1, '2021-06-16', ' lorem  lorem  lorem  lorem  lorem  lorem  lorem  lorem  lorem  lorem  lorem  lorem  lorem  lorem ', 2, 1),
+(2, '2021-06-15', ' lorem  lorem  lorem  lorem  lorem  lorem  lorem  lorem  lorem  lorem  lorem  lorem ', 2, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -47,8 +55,19 @@ CREATE TABLE `client` (
   `prenom_client` varchar(25) COLLATE utf8_bin NOT NULL,
   `profession` varchar(25) COLLATE utf8_bin NOT NULL,
   `age_client` int(11) DEFAULT NULL,
-  `fk_user` int(11) NOT NULL
+  `id_user` int(11) NOT NULL,
+  `cin` varchar(50) COLLATE utf8_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Dumping data for table `client`
+--
+
+INSERT INTO `client` (`id_client`, `nom_client`, `prenom_client`, `profession`, `age_client`, `id_user`, `cin`) VALUES
+(1, 'hassan', 'hassan', 'prof', 33, 1, 'HH32346'),
+(2, 'Ali', 'Ali', 'actor', 43, 2, 'HH12343'),
+(3, 'SALHI', 'SALHI', 'developer', 44, 3, 'HH47578'),
+(4, 'ilyas', 'ilyas', 'ceo', 44, 4, 'HH48573');
 
 -- --------------------------------------------------------
 
@@ -85,6 +104,16 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id_user`, `token`) VALUES
+(4, '$2y$10$7bkpeo2ICCNRtAwqxhKgK.szCJTHJHphkXRNx3lOCeUUNoU0jx0QW'),
+(1, '$2y$10$NofyYwYDj424JLy7tzNVWudzcH0QAL6RG4aOg/JI41sdcRpEA2a72'),
+(2, '$2y$10$ucWh6NMCVfwjJWeOLDVxjOt4JyZNelSdt5uvsljxQl9ryp4uKbXpa'),
+(3, '$2y$10$xZsOx18h2AZp2P8xLzSMoOBfJxGGNhjcEHacMVvwXAJyqHn313CES');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -100,7 +129,9 @@ ALTER TABLE `appointment`
 -- Indexes for table `client`
 --
 ALTER TABLE `client`
-  ADD PRIMARY KEY (`id_client`);
+  ADD PRIMARY KEY (`id_client`),
+  ADD UNIQUE KEY `cin` (`cin`),
+  ADD KEY `id_user` (`id_user`);
 
 --
 -- Indexes for table `creneaux`
@@ -123,13 +154,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `appointment`
 --
 ALTER TABLE `appointment`
-  MODIFY `id_appointment` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_appointment` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `client`
 --
 ALTER TABLE `client`
-  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `creneaux`
@@ -141,7 +172,7 @@ ALTER TABLE `creneaux`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -153,6 +184,12 @@ ALTER TABLE `user`
 ALTER TABLE `appointment`
   ADD CONSTRAINT `FK_client` FOREIGN KEY (`id_client`) REFERENCES `client` (`id_client`),
   ADD CONSTRAINT `FK_creneaux` FOREIGN KEY (`id_creneaux`) REFERENCES `creneaux` (`id_creneaux`);
+
+--
+-- Constraints for table `client`
+--
+ALTER TABLE `client`
+  ADD CONSTRAINT `id_user` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
