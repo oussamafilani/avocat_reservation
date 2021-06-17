@@ -5,7 +5,7 @@ class Connect
     private $host = "localhost";
     private $password = "";
     private $username = "root";
-    private $db_name = "product_api";
+    private $db_name = "g_avocat";
     private $conn;
 
     public function connect()
