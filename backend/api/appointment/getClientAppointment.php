@@ -1,7 +1,9 @@
 <?php
+
 // Headers
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
+
 
 include_once '../../Models/Connect.php';
 include_once '../../Models/Appointment.php';
@@ -13,8 +15,12 @@ $db = $database->connect();
 // Instantiate Appointment object
 $Appointment = new Appointment($db);
 
+
+// Get ID
+$Appointment->id_client = isset($_GET['id_client']) ? $_GET['id_client'] : die();
+
 // Appointment query
-$result = $Appointment->read();
+$result = $Appointment->getClientAppointment();
 // Get row count
 $num = $result->rowCount();
 

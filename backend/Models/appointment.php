@@ -32,6 +32,23 @@ class Appointment
         return $stmt;
     }
 
+    // Get Single Appointment
+    public function getClientAppointment()
+    {
+        // Create query
+        $query = 'SELECT * FROM ' . $this->table . '  WHERE appointment.id_client = ?';
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Bind ID
+        $stmt->bindParam(1, $this->id_client);
+
+        // Execute query
+        $stmt->execute();
+
+        return $stmt;
+    }
 
     // Create Appointment
     public function create()
@@ -58,5 +75,31 @@ class Appointment
         if ($stmt->execute()) {
             return true;
         }
+    }
+
+    // Delete Appointment
+    public function delete()
+    {
+        // Create query
+        $query = 'DELETE FROM ' . $this->table . ' WHERE id_appointment = :id_appointment';
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Clean data
+        $this->id_appointment = htmlspecialchars(strip_tags($this->id_appointment));
+
+        // Bind data
+        $stmt->bindParam(':id_appointment', $this->id_appointment);
+
+        // Execute query
+        if ($stmt->execute()) {
+            return true;
+        }
+
+        // Print error if something goes wrong
+        printf("Error: %s.\n", $stmt->error);
+
+        return false;
     }
 }
