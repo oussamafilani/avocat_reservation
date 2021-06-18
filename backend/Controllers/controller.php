@@ -9,6 +9,7 @@ function generateToken()
     //Convert the binary data into hexadecimal representation.
     $ran = bin2hex($ran);
 
+    //Generate Random number from 100000 to 999999
     $randomnumber = rand(100000, 999999);
 
     $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
