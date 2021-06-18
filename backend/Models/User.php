@@ -31,7 +31,7 @@ class User
 
     public function CheckCin()
     {
-        $stmt  = $this->conn->prepare("SELECT * FROM "  . $this->table1 . " WHERE cin = :cin");
+        $stmt  = $this->conn->prepare("SELECT * FROM "  . $this->table2 . " WHERE cin = :cin");
         $stmt->bindValue(':cin', $this->cin, PDO::PARAM_STR);
         $stmt->execute();
         $RowCount = $stmt->rowCount();

@@ -29,12 +29,20 @@ $User->cin = $data->cin;
 
 
 // Create User
-if ($User->Register()) {
-    echo json_encode(
-        array('message' => 'User Created')
-    );
+
+
+if (!$User->CheckCin()) {
+    if ($User->Register()) {
+        echo json_encode(
+            array('message' => 'User Created')
+        );
+    } else {
+        echo json_encode(
+            array('message' => 'User Not Created')
+        );
+    }
 } else {
     echo json_encode(
-        array('message' => 'User Not Created')
+        array('message' => 'Cin Already Exist')
     );
 }

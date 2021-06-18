@@ -19,7 +19,10 @@ class Controller
         for ($i = 0; $i < 4; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
-        return $randomnumber . '/' . $randomString . '/' . $ran;
+        $token =  $randomnumber . '/' . $randomString . '/' . $ran;
+
+        // $password = password_hash($token, PASSWORD_DEFAULT);
+        return $token;
     }
 }
 
