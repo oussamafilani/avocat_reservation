@@ -81,7 +81,7 @@ class Appointment
     public function update()
     {
 
-        if ($this->token === "123") {
+        if ($this->token === "967198/WHAP/fc") {
             // Create query
             $query = 'UPDATE ' . $this->table . '
                                   SET date = :date, sujet = :sujet, id_creneaux = :id_creneaux

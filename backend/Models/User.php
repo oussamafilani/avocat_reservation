@@ -28,9 +28,19 @@ class User
 
 
 
-    public function Autonfication()
+
+    public function CheckCIn()
     {
-        $stmt  = $this->conn->prepare("SELECT * FROM user WHERE token = :token");
+        $stmt  = $this->conn->prepare("SELECT * FROM "  . $this->table1 . " WHERE cin = :cin");
+        $stmt->bindValue(':cin', $this->cin, PDO::PARAM_STR);
+        $stmt->execute();
+        $RowCount = $stmt->rowCount();
+        return  $RowCount;
+    }
+
+    public function CheckToken()
+    {
+        $stmt  = $this->conn->prepare("SELECT * FROM"  . $this->table1 . "WHERE token = :token");
         $stmt->bindValue(':token', $this->token, PDO::PARAM_STR);
         $stmt->execute();
 
@@ -40,29 +50,16 @@ class User
 
 
         if ($RowCount  == 1 && !empty($row) && password_verify($this->token, $hashPassword)) {
-
             return  true;
         } else {
             return false;
         }
     }
 
-    public function CheckCIn()
-    {
-        $stmt  = $this->conn->prepare("SELECT * FROM user WHERE cin = :cin");
-        $stmt->bindValue(':cin', $this->cin, PDO::PARAM_STR);
-        $stmt->execute();
-        $RowCount = $stmt->rowCount();
-        return  $RowCount;
-    }
-
-
-
-
 
     public function Register()
     {
-        $stmt  = $this->conn->prepare("INSERT INTO user (toekn) VALUES (:token)");
+        $stmt  = $this->conn->prepare("INSERT INTO "  . $this->table1 . " (token) VALUES (:token)");
         $stmt->bindValue(':token',  $this->token, PDO::PARAM_STR);
         $stmt->execute();
 
@@ -74,7 +71,7 @@ class User
 
 
 
-        $stmt2  = $this->conn->prepare("INSERT INTO client (nom_client, prenom_client, profession,age_client,id_user,cin) VALUES (:nom_client, :prenom_client, :profession, :age_client,:id_user,:cin)");
+        $stmt2  = $this->conn->prepare("INSERT INTO "  . $this->table2 . " (nom_client, prenom_client, profession,age_client,id_user,cin) VALUES (:nom_client, :prenom_client, :profession, :age_client,:id_user,:cin)");
 
         $stmt2->bindValue(':nom_client',  $this->nom_client, PDO::PARAM_STR);
         $stmt2->bindValue(':prenom_client',  $this->prenom_client, PDO::PARAM_STR);
@@ -83,5 +80,10 @@ class User
         $stmt2->bindValue(':id_user',  $this->id_user, PDO::PARAM_INT);
         $stmt2->bindValue(':cin',  $this->cin, PDO::PARAM_STR);
         $stmt2->execute();
+
+        // Execute query
+        if ($stmt2->execute()) {
+            return true;
+        }
     }
 }
