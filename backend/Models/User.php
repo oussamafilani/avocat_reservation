@@ -29,7 +29,7 @@ class User
 
 
 
-    public function CheckCIn()
+    public function CheckCin()
     {
         $stmt  = $this->conn->prepare("SELECT * FROM "  . $this->table1 . " WHERE cin = :cin");
         $stmt->bindValue(':cin', $this->cin, PDO::PARAM_STR);
@@ -79,11 +79,14 @@ class User
         $stmt2->bindValue(':age_client',  $this->age_client, PDO::PARAM_INT);
         $stmt2->bindValue(':id_user',  $this->id_user, PDO::PARAM_INT);
         $stmt2->bindValue(':cin',  $this->cin, PDO::PARAM_STR);
-        $stmt2->execute();
 
         // Execute query
         if ($stmt2->execute()) {
             return true;
+        } else {
+            printf("Error: %s.\n", $stmt->error);
+
+            return false;
         }
     }
 }
