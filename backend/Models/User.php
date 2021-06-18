@@ -28,6 +28,22 @@ class User
 
 
 
+    // Get appointment
+    public function read()
+    {
+        // Create query
+        $query = 'SELECT * FROM ' . $this->table2 . '';
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Execute query
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+
 
     public function CheckCin()
     {
@@ -50,6 +66,9 @@ class User
 
 
         if ($RowCount  == 1 && !empty($row) && password_verify($this->token, $hashPassword)) {
+            // Initialize the session
+            // session_start();
+            // $_SESSION['token'] =  $row['id_user'];
             return  true;
         } else {
             return false;
