@@ -28,6 +28,4 @@ class Controller
 
 
 
-
-
-// echo Controller::generateToken();
+echo Controller::generateToken();

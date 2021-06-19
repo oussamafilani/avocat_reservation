@@ -42,24 +42,30 @@ if ($num > 0) {
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
 
-        $post_item = array(
-            'nom_client' => $nom_client,
-            'prenom_client' => $prenom_client,
-            'profession' => $profession,
-            'age_client' => $age_client,
-            'cin' => $cin,
-            "appointment" => array(
-                "id_appointment" => $id_appointment,
-                "date" => $date,
-                "sujet" => $sujet,
-                "d_hour" => $d_hour,
-                "f_hour" => $f_hour,
+        $client_info = [
+            'client_info' => array(
+                'nom_client' => $nom_client,
+                'prenom_client' => $prenom_client,
+                'profession' => $profession,
+                'age_client' => $age_client,
+                'cin' => $cin,
             )
+        ];
+
+        $post_item = array(
+            "id_appointment" => $id_appointment,
+            "date" => $date,
+            "sujet" => $sujet,
+            "d_hour" => $d_hour,
+            "f_hour" => $f_hour,
         );
 
         // Push to "data"
-        array_push($posts_arr, $post_item);
+        // array_push($posts_arr, $post_item);
     }
+    $client_info['client_info']['appointment'] = $post_item;
+
+    array_push($posts_arr, $client_info);
 
     // Turn to JSON & output
     echo json_encode($posts_arr);
