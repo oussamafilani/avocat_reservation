@@ -4,7 +4,6 @@ class User
 {
     // DB stuff
     private $conn;
-    private $tables = array('user', 'client', 'creneaux', 'appointment');
 
     // user Properties
     public $id_user;

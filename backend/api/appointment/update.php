@@ -7,7 +7,6 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 
 include_once '../../Models/Connect.php';
 include_once '../../Models/Appointment.php';
-include_once '../../Models/User.php';
 
 // Instantiate DB & connect
 $database = new Connect();
@@ -15,16 +14,14 @@ $db = $database->connect();
 
 // Instantiate Appointment object
 $Appointment = new Appointment($db);
-$User = new User($db);
-
 
 // Get raw posted data
 $data = json_decode(file_get_contents("php://input"));
 
 
-//check user token
-$User->token = $data->token;
-$chekToken = $User->CheckToken();
+//check  token
+$Appointment->token = $data->token;
+$chekToken = $Appointment->CheckToken();
 
 
 // Set ID to update

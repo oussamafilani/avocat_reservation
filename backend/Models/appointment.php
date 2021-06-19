@@ -32,6 +32,25 @@ class Appointment
         return $stmt;
     }
 
+
+    public function CheckToken()
+    {
+        $stmt  = $this->conn->prepare("SELECT * FROM user WHERE token = :token");
+        $stmt->bindValue(':token', $this->token, PDO::PARAM_STR);
+        $stmt->execute();
+        // $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        // return $row['token'];
+        $RowCount = $stmt->rowCount();
+        return $RowCount;
+
+
+        // if ($RowCount  == 1 && !empty($row) && password_verify($this->token, $hashPassword)) {
+        //     return  true;
+        // } else {
+        //     return false;
+        // }
+    }
+
     // Get Single Appointment
     public function getClientAppointment()
     {

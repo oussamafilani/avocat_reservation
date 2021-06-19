@@ -19,7 +19,7 @@ $Appointment = new Appointment($db);
 // Get raw posted data
 $data = json_decode(file_get_contents("php://input"));
 
-// $Appointment->token = $data->token;
+$Appointment->token = $data->token;
 $Appointment->date = $data->date;
 $Appointment->sujet = $data->sujet;
 $Appointment->id_creneaux = $data->id_creneaux;
