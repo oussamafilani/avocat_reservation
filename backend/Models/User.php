@@ -43,8 +43,6 @@ class User
         return $stmt;
     }
 
-
-
     public function CheckCin()
     {
         $stmt  = $this->conn->prepare("SELECT * FROM "  . $this->table2 . " WHERE cin = :cin");
