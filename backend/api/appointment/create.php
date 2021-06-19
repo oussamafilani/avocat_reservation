@@ -29,12 +29,18 @@ $Appointment->id_creneaux = $data->id_creneaux;
 $Appointment->id_client = $data->id_client;
 
 // Create Appointment
-if ($Appointment->create()) {
-    echo json_encode(
-        array('message' => 'Appointment Created')
-    );
+if ($chekToken) {
+    if ($Appointment->create()) {
+        echo json_encode(
+            array('message' => 'Appointment Created')
+        );
+    } else {
+        echo json_encode(
+            array('message' => 'Appointment Not Created')
+        );
+    }
 } else {
     echo json_encode(
-        array('message' => 'Appointment Not Created')
+        array('message' => 'Token Not Valid')
     );
 }

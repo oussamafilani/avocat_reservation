@@ -2,6 +2,9 @@
 // Headers
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
+
 
 include_once '../../Models/Connect.php';
 include_once '../../Models/User.php';
@@ -13,8 +16,14 @@ $db = $database->connect();
 // Instantiate User object
 $User = new User($db);
 
-// Get ID
-$User->id_client = isset($_GET['id_client']) ? $_GET['id_client'] : die();
+// Get raw posted data
+$data = json_decode(file_get_contents("php://input"));
+
+//check  token
+$User->token = $data->token;
+$chekToken = $User->CheckToken();
+
+$User->id_client = $data->id_client;
 
 // User query
 $result = $User->getInfo();
@@ -22,42 +31,48 @@ $result = $User->getInfo();
 $num = $result->rowCount();
 
 // Check if any User
-if ($num > 0) {
-    // Post array
-    $posts_arr = array();
-    $appointment_data = array();
+if ($chekToken) {
+    if ($num > 0) {
+        // Post array
+        $posts_arr = array();
+        $appointment_data = array();
 
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        extract($row);
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
 
-        $client_info = ['client_info' => array(
-            'nom_client' => $nom_client,
-            'prenom_client' => $prenom_client,
-            'profession' => $profession,
-            'age_client' => $age_client,
-            'cin' => $cin,
-        )];
+            $client_info = ['client_info' => array(
+                'nom_client' => $nom_client,
+                'prenom_client' => $prenom_client,
+                'profession' => $profession,
+                'age_client' => $age_client,
+                'cin' => $cin,
+            )];
 
-        $post_item = array(
-            'id_appointment' => $id_appointment,
-            'date' => $date,
-            'sujet' => $sujet,
-            'd_hour' => $d_hour,
-            'f_hour' => $f_hour,
+            $post_item = array(
+                'id_appointment' => $id_appointment,
+                'date' => $date,
+                'sujet' => $sujet,
+                'd_hour' => $d_hour,
+                'f_hour' => $f_hour,
+            );
+
+            // Push to "data"
+            array_push($appointment_data, $post_item);
+        }
+        $client_info['client_info']['appointments'] = $appointment_data;
+
+        array_push($posts_arr, $client_info);
+
+        // Turn to JSON & output
+        echo json_encode($posts_arr);
+    } else {
+        // No User
+        echo json_encode(
+            array('message' => 'No User Found')
         );
-
-        // Push to "data"
-        array_push($appointment_data, $post_item);
     }
-    $client_info['client_info']['appointments'] = $appointment_data;
-
-    array_push($posts_arr, $client_info);
-
-    // Turn to JSON & output
-    echo json_encode($posts_arr);
 } else {
-    // No User
     echo json_encode(
-        array('message' => 'No User Found')
+        array('message' => 'Token Not Valid')
     );
 }
