@@ -18,17 +18,27 @@ $Appointment = new Appointment($db);
 // Get raw posted data
 $data = json_decode(file_get_contents("php://input"));
 
-// Set ID to delete
+//check  token
 $Appointment->token = $data->token;
+$chekToken = $Appointment->CheckToken();
+
+// Set ID to delete
+
 $Appointment->id_appointment = $data->id_appointment;
 
 // Delete Appointment
-if ($Appointment->delete()) {
-    echo json_encode(
-        array('message' => 'Appointment Deleted')
-    );
+if ($chekToken) {
+    if ($Appointment->delete()) {
+        echo json_encode(
+            array('message' => 'Appointment Deleted')
+        );
+    } else {
+        echo json_encode(
+            array('message' => 'Appointment Not Deleted')
+        );
+    }
 } else {
     echo json_encode(
-        array('message' => 'Appointment Not Deleted')
+        array('message' => 'Token Not Valid')
     );
 }
