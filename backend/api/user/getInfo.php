@@ -1,17 +1,5 @@
-// $post_item = array(
-// 'nom_client' => $nom_client,
-// 'prenom_client' => $prenom_client,
-// 'profession' => $profession,
-// 'age_client' => $age_client,
-// 'cin' => $cin,
-// "appointment" => array(
-// "id_appointment" => $id_appointment,
-// "date" => $date,
-// "sujet" => $sujet,
-// "d_hour" => $d_hour,
-// "d_fin" => $d_fin,
-// )
-// );
+<?php
+
 
 // SELECT client.id_client,client.nom_client,client.prenom_client,client.profession,client.age_client,client.cin,
 // appointment.id_appointment,appointment.date,appointment.sujet,
@@ -21,40 +9,32 @@
 // INNER JOIN creneaux on creneaux.id_creneaux = appointment.id_creneaux)
 // GROUP BY(client.id_client)
 
-// SELECT * FROM ((appointment
-// INNER JOIN client on client.id_client = appointment.id_client)
-// INNER JOIN creneaux on creneaux.id_creneaux = appointment.id_creneaux)
-// WHERE client.id_client = 2
-
-
+?>
 
 <?php
-
 // Headers
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
-
 include_once '../../Models/Connect.php';
-include_once '../../Models/Appointment.php';
+include_once '../../Models/User.php';
 
 // Instantiate DB & connect
 $database = new Connect();
 $db = $database->connect();
 
-// Instantiate Appointment object
-$Appointment = new Appointment($db);
-
+// Instantiate User object
+$User = new User($db);
 
 // Get ID
-$Appointment->id_client = isset($_GET['id_client']) ? $_GET['id_client'] : die();
+$User->id_client = isset($_GET['id_client']) ? $_GET['id_client'] : die();
 
-// Appointment query
-$result = $Appointment->getClientAppointment();
+// User query
+$result = $User->getInfo();
 // Get row count
 $num = $result->rowCount();
 
-// Check if any Appointment
+// Check if any User
 if ($num > 0) {
     // Post array
     $posts_arr = array();
@@ -63,11 +43,18 @@ if ($num > 0) {
         extract($row);
 
         $post_item = array(
-            'id_appointment' => $id_appointment,
-            'date' => $date,
-            'sujet' => $sujet,
-            'id_creneaux' => $id_creneaux,
-            'id_client' => $id_client,
+            'nom_client' => $nom_client,
+            'prenom_client' => $prenom_client,
+            'profession' => $profession,
+            'age_client' => $age_client,
+            'cin' => $cin,
+            "appointment" => array(
+                "id_appointment" => $id_appointment,
+                "date" => $date,
+                "sujet" => $sujet,
+                "d_hour" => $d_hour,
+                "f_hour" => $f_hour,
+            )
         );
 
         // Push to "data"
@@ -77,8 +64,8 @@ if ($num > 0) {
     // Turn to JSON & output
     echo json_encode($posts_arr);
 } else {
-    // No Appointment
+    // No User
     echo json_encode(
-        array('message' => 'No Appointment Found')
+        array('message' => 'No User Found')
     );
 }
