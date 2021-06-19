@@ -5,10 +5,6 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
-// include_once '../Models/Connect.php';
-// include_once '../Models/Appointment.php';
-
-
 class appointmentController
 {
 
@@ -53,6 +49,34 @@ class appointmentController
             } else {
                 echo json_encode(
                     array('message' => 'Appointment Not Created')
+                );
+            }
+        } else {
+            echo json_encode(
+                array('message' => 'Token Not Valid')
+            );
+        }
+    }
+
+    public function deleteAppointment()
+    {
+        //check  token
+        $this->Appointment->token = $this->data->token;
+        $this->chekToken = $this->Appointment->CheckToken();
+
+        // Set ID to delete
+
+        $this->Appointment->id_appointment = $this->data->id_appointment;
+
+        // Delete Appointment
+        if ($this->chekToken) {
+            if ($this->Appointment->delete()) {
+                echo json_encode(
+                    array('message' => 'Appointment Deleted')
+                );
+            } else {
+                echo json_encode(
+                    array('message' => 'Appointment Not Deleted')
                 );
             }
         } else {
