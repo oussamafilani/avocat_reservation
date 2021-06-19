@@ -1,6 +1,6 @@
 <?php
 spl_autoload_register(function ($class) {
-    $path = "model/" . $class . ".php";
+    $path = "Models/" . $class . ".php";
     if (file_exists($path)) {
         require_once "$path";
     }
@@ -16,9 +16,9 @@ if (isset($params[0]) & !empty($params[0])) {
 
     $controller = ucfirst($params[0]);
 
-    if (file_exists("controller/" . $controller . ".php")) {
+    if (file_exists("Controllers/" . $controller . ".php")) {
 
-        require_once 'controller/' . $controller . ".php";
+        require_once 'Controllers/' . $controller . ".php";
         $obj = new $controller();
         if (isset($params[1]) & !empty($params[1])) {
             if (method_exists($obj, $params[1])) {

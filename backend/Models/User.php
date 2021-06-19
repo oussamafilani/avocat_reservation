@@ -4,7 +4,7 @@ class User
 {
     // DB stuff
     private $conn;
-    private $tables = ['user', 'client', 'creneaux', 'appointment'];
+    private $tables = array('user', 'client', 'creneaux', 'appointment');
 
     // user Properties
     public $id_user;
@@ -42,7 +42,7 @@ class User
     public function read()
     {
         // Create query
-        $query = 'SELECT * FROM ' . $this->tables[1] . '';
+        $query = 'SELECT * FROM client';
 
         // Prepare statement
         $stmt = $this->conn->prepare($query);
@@ -58,9 +58,9 @@ class User
     {
         // Create query
         // private $tables = ['user', 'client', 'creneaux', 'appointment'];
-        $query = "SELECT * FROM ((" . $this->tables[3] . "
-        INNER JOIN " . $this->tables[1] . " on client.id_client = appointment.id_client)
-        INNER JOIN " . $this->tables[2] . " on creneaux.id_creneaux = appointment.id_creneaux)
+        $query = "SELECT * FROM ((appointment
+        INNER JOIN client on client.id_client = appointment.id_client)
+        INNER JOIN creneaux on creneaux.id_creneaux = appointment.id_creneaux)
         WHERE client.id_client = ?";
 
 
@@ -78,7 +78,7 @@ class User
 
     public function CheckCin()
     {
-        $stmt  = $this->conn->prepare("SELECT * FROM "  . $this->tables[1] . " WHERE cin = :cin");
+        $stmt  = $this->conn->prepare("SELECT * FROM client WHERE cin = :cin");
         $stmt->bindValue(':cin', $this->cin, PDO::PARAM_STR);
         $stmt->execute();
         $RowCount = $stmt->rowCount();
@@ -87,29 +87,31 @@ class User
 
     public function CheckToken()
     {
-        $stmt  = $this->conn->prepare("SELECT * FROM"  . $this->tables[0] . "WHERE token = :token");
+        $stmt  = $this->conn->prepare("SELECT * FROM user WHERE token = :token");
         $stmt->bindValue(':token', $this->token, PDO::PARAM_STR);
         $stmt->execute();
-
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $hashPassword = $row['token'];
+        // $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        // return $row['token'];
         $RowCount = $stmt->rowCount();
+        return $RowCount;
 
 
-        if ($RowCount  == 1 && !empty($row) && password_verify($this->token, $hashPassword)) {
-            // Initialize the session
-            // session_start();
-            // $_SESSION['token'] =  $row['id_user'];
-            return  true;
-        } else {
-            return false;
-        }
+        // if ($RowCount  == 1 && !empty($row) && password_verify($this->token, $hashPassword)) {
+        //     return  true;
+        // } else {
+        //     return false;
+        // }
+    }
+
+    public function getToken()
+    {
+        return $this->token;
     }
 
 
     public function Register()
     {
-        $stmt  = $this->conn->prepare("INSERT INTO "  . $this->tables[0] . " (token) VALUES (:token)");
+        $stmt  = $this->conn->prepare("INSERT INTO user (token) VALUES (:token)");
         $stmt->bindValue(':token',  $this->token, PDO::PARAM_STR);
         $stmt->execute();
 
@@ -121,7 +123,7 @@ class User
 
 
 
-        $stmt2  = $this->conn->prepare("INSERT INTO "  . $this->tables[1] . " (nom_client, prenom_client, profession,age_client,id_user,cin) VALUES (:nom_client, :prenom_client, :profession, :age_client,:id_user,:cin)");
+        $stmt2  = $this->conn->prepare("INSERT INTO client (nom_client, prenom_client, profession,age_client,id_user,cin) VALUES (:nom_client, :prenom_client, :profession, :age_client,:id_user,:cin)");
 
         $stmt2->bindValue(':nom_client',  $this->nom_client, PDO::PARAM_STR);
         $stmt2->bindValue(':prenom_client',  $this->prenom_client, PDO::PARAM_STR);

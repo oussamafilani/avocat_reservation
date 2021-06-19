@@ -1,17 +1,4 @@
 <?php
-
-
-// SELECT client.id_client,client.nom_client,client.prenom_client,client.profession,client.age_client,client.cin,
-// appointment.id_appointment,appointment.date,appointment.sujet,
-// creneaux.d_hour,creneaux.f_hour
-// FROM(( appointment
-// INNER JOIN client on client.id_client = 1 )
-// INNER JOIN creneaux on creneaux.id_creneaux = appointment.id_creneaux)
-// GROUP BY(client.id_client)
-
-?>
-
-<?php
 // Headers
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');

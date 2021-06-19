@@ -19,6 +19,7 @@ $Appointment = new Appointment($db);
 $data = json_decode(file_get_contents("php://input"));
 
 // Set ID to delete
+$Appointment->token = $data->token;
 $Appointment->id_appointment = $data->id_appointment;
 
 // Delete Appointment

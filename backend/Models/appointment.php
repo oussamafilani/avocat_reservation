@@ -81,39 +81,36 @@ class Appointment
     public function update()
     {
 
-        if ($this->token === "967198/WHAP/fc") {
-            // Create query
-            $query = 'UPDATE ' . $this->table . '
+
+        // Create query
+        $query = 'UPDATE ' . $this->table . '
                                   SET date = :date, sujet = :sujet, id_creneaux = :id_creneaux
                                   WHERE id_appointment = :id_appointment';
 
-            // Prepare statement
-            $stmt = $this->conn->prepare($query);
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
 
-            // Clean data
-            $this->date = htmlspecialchars(strip_tags($this->date));
-            $this->sujet = htmlspecialchars(strip_tags($this->sujet));
-            $this->id_creneaux = htmlspecialchars(strip_tags($this->id_creneaux));
-            $this->id = htmlspecialchars(strip_tags($this->id_appointment));
+        // Clean data
+        $this->date = htmlspecialchars(strip_tags($this->date));
+        $this->sujet = htmlspecialchars(strip_tags($this->sujet));
+        $this->id_creneaux = htmlspecialchars(strip_tags($this->id_creneaux));
+        $this->id = htmlspecialchars(strip_tags($this->id_appointment));
 
-            // Bind data
-            $stmt->bindParam(':date', $this->date);
-            $stmt->bindParam(':sujet', $this->sujet);
-            $stmt->bindParam(':id_creneaux', $this->id_creneaux);
-            $stmt->bindParam(':id_appointment', $this->id_appointment);
+        // Bind data
+        $stmt->bindParam(':date', $this->date);
+        $stmt->bindParam(':sujet', $this->sujet);
+        $stmt->bindParam(':id_creneaux', $this->id_creneaux);
+        $stmt->bindParam(':id_appointment', $this->id_appointment);
 
-            // Execute query
-            if ($stmt->execute()) {
-                return true;
-            }
-
-            // Print error if something goes wrong
-            printf("Error: %s.\n", $stmt->error);
-
-            return false;
-        } else {
-            return "no valid";
+        // Execute query
+        if ($stmt->execute()) {
+            return true;
         }
+
+        // Print error if something goes wrong
+        printf("Error: %s.\n", $stmt->error);
+
+        return true;
     }
 
 
