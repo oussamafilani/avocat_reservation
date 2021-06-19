@@ -1,1 +1,2 @@
+RewriteEngine On
 RewriteRule ^([a-zA-Z0-9-_/]*)$ route.php?p=$1
