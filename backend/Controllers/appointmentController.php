@@ -27,6 +27,37 @@ class appointmentController
         $this->data  = json_decode(file_get_contents("php://input"));
     }
 
+    // public function checkTimes()
+    // {
+    // }
+    public function availableTimes()
+    {
+        $this->Appointment->date = $this->data->date;
+        // available times query
+        $result = $this->Appointment->availableTimes();
+        // Get row count
+        $num = $result->rowCount();
+
+        // Check if any available times
+        if ($num > 0) {
+            // Post array
+            $posts_arr = array();
+
+            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                extract($row);
+
+                $post_item = array(
+                    'id_creneaux' => $id_creneaux,
+                );
+
+                // Push to "data"
+                array_push($posts_arr, $post_item);
+            }
+
+            // Turn to JSON & output
+            echo json_encode($posts_arr);
+        }
+    }
 
     public function createAppointment()
     {

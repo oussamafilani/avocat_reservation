@@ -17,6 +17,23 @@ class Appointment
         $this->conn = $db;
     }
 
+    public function checkTimes()
+    {
+        $stmt  = $this->conn->prepare('SELECT * FROM ' . $this->table . ' WHERE date = :date and id_creneaux:id_creneaux');
+        $stmt->bindValue(':cin', $this->cin, PDO::PARAM_STR);
+        $stmt->bindValue(':cin', $this->id_creneaux, PDO::PARAM_INT);
+        $stmt->execute();
+        $RowCount = $stmt->rowCount();
+        return  $RowCount;
+    }
+    public function availableTimes()
+    {
+
+        $stmt  = $this->conn->prepare(" SELECT creneaux.id_creneaux FROM creneaux WHERE id_creneaux NOT IN (SELECT id_creneaux FROM appointment where date = :date)");
+        $stmt->bindValue(':date', $this->date, PDO::PARAM_STR);
+        $stmt->execute();
+        return  $stmt;
+    }
     // Get appointment
     public function read()
     {
