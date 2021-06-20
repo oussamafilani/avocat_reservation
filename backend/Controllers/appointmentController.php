@@ -47,7 +47,7 @@ class appointmentController
                 extract($row);
 
                 $post_item = array(
-                    'id_creneaux' => $id_creneaux,
+                    'd_hour' => $d_hour,
                 );
 
                 // Push to "data"
@@ -56,6 +56,10 @@ class appointmentController
 
             // Turn to JSON & output
             echo json_encode($posts_arr);
+        } else {
+            echo json_encode(
+                array('message' => 'theres no times')
+            );
         }
     }
 

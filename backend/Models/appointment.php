@@ -29,7 +29,7 @@ class Appointment
     public function availableTimes()
     {
 
-        $stmt  = $this->conn->prepare(" SELECT creneaux.id_creneaux FROM creneaux WHERE id_creneaux NOT IN (SELECT id_creneaux FROM appointment where date = :date)");
+        $stmt  = $this->conn->prepare(" SELECT creneaux.d_hour FROM creneaux WHERE id_creneaux NOT IN (SELECT id_creneaux FROM appointment where date = :date)");
         $stmt->bindValue(':date', $this->date, PDO::PARAM_STR);
         $stmt->execute();
         return  $stmt;
