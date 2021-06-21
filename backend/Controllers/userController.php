@@ -13,17 +13,22 @@ class userController
     private $db;
     private $User;
     private $chekToken;
+    private $contentType;
+
 
     // Get raw posted data
 
 
     public function __construct()
     {
+        // check sontent type
+        $this->contentType = isset($_SERVER['CONTENT_TYPE']) ? trim($_SERVER['CONTENT_TYPE']) : '';
         // Instantiate DB & connect
         $this->database = new Connect();
         $this->db = $this->database->connect();
         // Instantiate Appointment object
         $this->User = new User($this->db);
+
         $this->data  = json_decode(file_get_contents("php://input"));
     }
 
@@ -82,63 +87,65 @@ class userController
     }
     public function getUserInfo()
     {
+        if ($this->contentType === 'application/json') {
 
-        //check  token
-        $this->User->token = $this->data->token;
-        $this->chekToken = $this->User->CheckToken();
+            //check  token
+            $this->User->token = $this->data->token;
+            $this->chekToken = $this->User->CheckToken();
 
-        $this->User->id_client = $this->data->id_client;
+            $this->User->id_client = $this->data->id_client;
 
-        // User query
-        $result = $this->User->getInfo();
-        // Get row count
-        $num = $result->rowCount();
+            // User query
+            $result = $this->User->getInfo();
+            // Get row count
+            $num = $result->rowCount();
 
-        // Check if any User
-        if ($this->chekToken) {
-            if ($num > 0) {
-                // Post array
-                $posts_arr = array();
-                $appointment_data = array();
+            // Check if any User
+            if ($this->chekToken) {
+                if ($num > 0) {
+                    // Post array
+                    $posts_arr = array();
+                    $appointment_data = array();
 
-                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                    extract($row);
+                    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                        extract($row);
 
-                    $client_info = ['client_info' => array(
-                        'nom_client' => $nom_client,
-                        'prenom_client' => $prenom_client,
-                        'profession' => $profession,
-                        'age_client' => $age_client,
-                        'cin' => $cin,
-                    )];
+                        $client_info = ['client_info' => array(
+                            'nom_client' => $nom_client,
+                            'prenom_client' => $prenom_client,
+                            'profession' => $profession,
+                            'age_client' => $age_client,
+                            'cin' => $cin,
+                        )];
 
-                    $post_item = array(
-                        'id_appointment' => $id_appointment,
-                        'date' => $date,
-                        'sujet' => $sujet,
-                        'd_hour' => $d_hour,
-                        'f_hour' => $f_hour,
+                        $post_item = array(
+                            'id_appointment' => $id_appointment,
+                            'date' => $date,
+                            'sujet' => $sujet,
+                            'd_hour' => $d_hour,
+                            'f_hour' => $f_hour,
+                        );
+
+                        // Push to "data"
+                        array_push($appointment_data, $post_item);
+                    }
+                    $client_info['client_info']['appointments'] = $appointment_data;
+
+                    array_push($posts_arr, $client_info);
+
+                    // Turn to JSON & output
+                    echo json_encode($posts_arr);
+                } else {
+                    // No User
+                    echo json_encode(
+                        array('message' => 'No User Found')
                     );
-
-                    // Push to "data"
-                    array_push($appointment_data, $post_item);
                 }
-                $client_info['client_info']['appointments'] = $appointment_data;
-
-                array_push($posts_arr, $client_info);
-
-                // Turn to JSON & output
-                echo json_encode($posts_arr);
             } else {
-                // No User
                 echo json_encode(
-                    array('message' => 'No User Found')
+                    array('message' => 'Token Not Valid')
                 );
             }
-        } else {
-            echo json_encode(
-                array('message' => 'Token Not Valid')
-            );
         }
     }
     public function readUser()
