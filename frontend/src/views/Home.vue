@@ -45,6 +45,8 @@ export default {
       let data = await res.json();
       console.log(data);
       this.name = data[0].nom_client;
+      sessionStorage.setItem("token", this.token);
+
       this.$router.push({ name: "booking", params: { name: this.name } });
 
       return this.name;
@@ -70,6 +72,11 @@ export default {
       console.log(data);
       this.newToken = data.message;
     },
+  },
+  beforeMount() {
+    if (sessionStorage.getItem("token")) {
+      this.$router.push({ name: "booking" });
+    }
   },
 };
 </script>

@@ -2,6 +2,7 @@
   <div class="Booking">
     <h1>This is an Booking page</h1>
     <p>{{ name }}</p>
+    <button @click="logout()">logout</button>
   </div>
 </template>
 
@@ -13,5 +14,11 @@ export default {
     };
   },
   computed: {},
+  methods: {
+    logout: function () {
+      sessionStorage.removeItem("token");
+      this.$router.push({ name: "Home" });
+    },
+  },
 };
 </script>
