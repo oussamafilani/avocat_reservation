@@ -52,7 +52,25 @@ class User
         return $stmt;
     }
 
-    // Get appointment
+    //Get Id client from token
+    public function getIdClientFromToken()
+    {
+        // Prepare statement
+        $stmt  = $this->conn->prepare("SELECT client.id_client FROM client INNER JOIN user on client.id_user = user.id_user AND user.token =:token");
+        $stmt->bindValue(':token', $this->token, PDO::PARAM_STR);
+        // Execute query
+        $stmt->execute();
+        $num = $stmt->rowCount();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($num > 0) {
+
+            return $row['id_client'];
+        } else {
+            return false;
+        }
+    }
+
+    // Get info
     public function getInfo()
     {
         // Create query
@@ -72,6 +90,20 @@ class User
         // Execute query
         $stmt->execute();
 
+        return $stmt;
+    }
+
+    // Get singel client info
+    public function getSingleClient()
+    {
+        // Prepare statement
+        $stmt  = $this->conn->prepare("SELECT * FROM client
+        INNER JOIN user on client.id_user = user.id_user
+        and user.token = :token");
+
+        $stmt->bindValue(':token', $this->token, PDO::PARAM_STR);
+        // Execute query
+        $stmt->execute();
         return $stmt;
     }
 
@@ -130,10 +162,9 @@ class User
         $stmt2->bindValue(':age_client',  $this->age_client, PDO::PARAM_INT);
         $stmt2->bindValue(':id_user',  $this->id_user, PDO::PARAM_INT);
         $stmt2->bindValue(':cin',  $this->cin, PDO::PARAM_STR);
-
         // Execute query
         if ($stmt2->execute()) {
-            return true;
+            return $this->token;
         } else {
             printf("Error: %s.\n", $stmt->error);
 

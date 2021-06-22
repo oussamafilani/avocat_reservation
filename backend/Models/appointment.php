@@ -34,6 +34,19 @@ class Appointment
         $stmt->execute();
         return  $stmt;
     }
+
+    //Get Id client from token
+    public function getIdClientFromToken()
+    {
+        // Prepare statement
+        $stmt  = $this->conn->prepare("SELECT client.id_client FROM client INNER JOIN user on client.id_user = user.id_user AND user.token =:token");
+        $stmt->bindValue(':token', $this->token, PDO::PARAM_STR);
+        // Execute query
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['id_client'];
+    }
+
     // Get appointment
     public function read()
     {

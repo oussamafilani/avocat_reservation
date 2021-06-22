@@ -128,7 +128,7 @@ class appointmentController
         $this->Appointment->token = $this->data->token;
         $this->chekToken = $this->Appointment->CheckToken();
 
-        $this->Appointment->id_client = $this->data->id_client;
+        $this->Appointment->id_client = $this->Appointment->getIdClientFromToken();
 
 
         if ($this->chekToken) {

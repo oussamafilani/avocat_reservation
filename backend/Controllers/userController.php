@@ -62,90 +62,137 @@ class userController
         $this->User->nom_client = $this->data->nom_client;
         $this->User->prenom_client = $this->data->prenom_client;
         $this->User->profession = $this->data->profession;
-        $this->User->age_client = $this->data->age_client;
+        $this->User->age_client = $this->data->profession;
         $this->User->cin = $this->data->cin;
 
+        //check if the data not emty
+        if (
+            !empty($this->data->nom_client)
+            && !empty($this->data->prenom_client)
+            && !empty($this->data->profession)
+            && !empty($this->data->profession)
+            && !empty($this->data->cin)
+        ) {
+            if (!$this->User->CheckCin()) {
+                // Create User
 
-        // Create User
-
-
-        if (!$this->User->CheckCin()) {
-            if ($this->User->Register()) {
-                echo json_encode(
-                    array('message' => 'User Created')
-                );
+                if ($this->User->Register()) {
+                    echo json_encode(
+                        array('message' => $this->User->token)
+                    );
+                } else {
+                    echo json_encode(
+                        array('message' => 'User Not Created')
+                    );
+                }
             } else {
                 echo json_encode(
-                    array('message' => 'User Not Created')
+                    array('message' => 'Cin Already Exist')
                 );
             }
         } else {
             echo json_encode(
-                array('message' => 'Cin Already Exist')
+                array('message' => 'please fill in the blank')
             );
         }
     }
     public function getUserInfo()
     {
-        if ($this->contentType === 'application/json') {
 
-            //check  token
-            $this->User->token = $this->data->token;
-            $this->chekToken = $this->User->CheckToken();
+        //check  token
+        $this->User->token = $this->data->token;
+        $this->chekToken = $this->User->CheckToken();
 
-            $this->User->id_client = $this->data->id_client;
+        $this->User->id_client = $this->User->getIdClientFromToken();
 
-            // User query
-            $result = $this->User->getInfo();
-            // Get row count
-            $num = $result->rowCount();
+        // User query
+        $result = $this->User->getInfo();
+        // Get row count
+        $num = $result->rowCount();
 
-            // Check if any User
-            if ($this->chekToken) {
-                if ($num > 0) {
-                    // Post array
-                    $posts_arr = array();
-                    $appointment_data = array();
+        // Check if any User
+        if ($this->chekToken) {
+            if ($num > 0) {
+                // Post array
+                $posts_arr = array();
+                $appointment_data = array();
 
-                    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                        extract($row);
+                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
 
-                        $client_info = ['client_info' => array(
-                            'nom_client' => $nom_client,
-                            'prenom_client' => $prenom_client,
-                            'profession' => $profession,
-                            'age_client' => $age_client,
-                            'cin' => $cin,
-                        )];
+                    $client_info = ['client_info' => array(
+                        'nom_client' => $nom_client,
+                        'prenom_client' => $prenom_client,
+                        'profession' => $profession,
+                        'age_client' => $age_client,
+                        'cin' => $cin,
+                    )];
 
-                        $post_item = array(
-                            'id_appointment' => $id_appointment,
-                            'date' => $date,
-                            'sujet' => $sujet,
-                            'd_hour' => $d_hour,
-                            'f_hour' => $f_hour,
-                        );
-
-                        // Push to "data"
-                        array_push($appointment_data, $post_item);
-                    }
-                    $client_info['client_info']['appointments'] = $appointment_data;
-
-                    array_push($posts_arr, $client_info);
-
-                    // Turn to JSON & output
-                    echo json_encode($posts_arr);
-                } else {
-                    // No User
-                    echo json_encode(
-                        array('message' => 'No User Found')
+                    $post_item = array(
+                        'id_appointment' => $id_appointment,
+                        'date' => $date,
+                        'sujet' => $sujet,
+                        'd_hour' => $d_hour,
+                        'f_hour' => $f_hour,
                     );
+
+                    // Push to "data"
+                    array_push($appointment_data, $post_item);
                 }
+                $client_info['client_info']['appointments'] = $appointment_data;
+
+                array_push($posts_arr, $client_info);
+
+                // Turn to JSON & output
+                echo json_encode($posts_arr);
             } else {
+                // No User
                 echo json_encode(
-                    array('message' => 'Token Not Valid')
+                    array('message' => 'No User Found')
                 );
             }
+        } else {
+            echo json_encode(
+                array('message' => 'Token Not Valid')
+            );
+        }
+    }
+
+    // Get singel client info
+    public function getSingleClient()
+    {
+        //check  token
+        $this->User->token = $this->data->token;
+        $this->chekToken = $this->User->CheckToken();
+
+        $this->User->id_client = $this->User->getIdClientFromToken();
+        $result = $this->User->getSingleClient();
+        $num = $result->rowCount();
+
+        if ($num > 0) {
+
+            $row = $result->fetch(PDO::FETCH_ASSOC);
+
+            extract($row);
+            $posts_arr = array();
+            $post_item = array(
+                'id_client' => $id_client,
+                'nom_client' => $nom_client,
+                'prenom_client' => $prenom_client,
+                'profession' => $profession,
+                'age_client' => $age_client,
+                'cin' => $cin,
+                'id_user' => $id_user,
+            );
+            // Push to "data"
+            array_push($posts_arr, $post_item);
+            // Turn to JSON & output
+            echo json_encode($posts_arr);
+        } else {
+            // No User
+            echo json_encode(
+                array('message' => 'No User Found')
+            );
         }
     }
     public function readUser()
