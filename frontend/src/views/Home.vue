@@ -38,7 +38,6 @@ export default {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            id_client: 1,
             token: this.token,
           }),
         }
