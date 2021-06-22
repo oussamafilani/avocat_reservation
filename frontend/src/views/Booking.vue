@@ -1,5 +1,5 @@
 <template>
     <div>
-        <h2>Brazil</h2>
+        <h2>Booking</h2>
     </div>
 </template>
