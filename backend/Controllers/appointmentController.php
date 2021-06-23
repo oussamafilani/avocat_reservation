@@ -28,33 +28,6 @@ class appointmentController
         $this->data  = json_decode(file_get_contents("php://input"));
     }
 
-    public function checkTimes()
-    {
-        //Check  token
-        $this->Appointment->token = $this->data->token;
-        $this->chekToken = $this->Appointment->CheckToken();
-
-        $this->Appointment->date = $this->data->date;
-
-        switch ($this->data->id_creneaux) {
-            case '10:00-10:30':
-                $this->Appointment->id_creneaux = 1;
-                break;
-            case '11:00-11:30':
-                $this->Appointment->id_creneaux = 2;
-                break;
-            case '14:00-14:30':
-                $this->Appointment->id_creneaux = 3;
-                break;
-            case '15:00-15:30':
-                $this->Appointment->id_creneaux = 4;
-                break;
-            case '16:00-16:30':
-                $this->Appointment->id_creneaux = 5;
-                break;
-        }
-        // $this->chekTime = $this->Appointment->checkTimes();
-    }
 
     public function availableTimes()
     {
@@ -73,7 +46,7 @@ class appointmentController
                 extract($row);
 
                 $post_item = array(
-                    'd_hour' => $d_hour,
+                    'd_hour' => $d_hour . '-' . $f_hour,
                 );
 
                 // Push to "data"
@@ -97,33 +70,30 @@ class appointmentController
 
         $this->Appointment->date = $this->data->date;
         $this->Appointment->sujet = $this->data->sujet;
-        // $this->Appointment->id_creneaux = $this->data->id_creneaux;
 
         switch ($this->data->id_creneaux) {
-            case '10:00-10:30':
+            case '10:00:00--10:30:00-':
                 $this->Appointment->id_creneaux = 1;
                 break;
-            case '11:00-11:30':
+            case '11:00:00-11:30:00':
                 $this->Appointment->id_creneaux = 2;
                 break;
-            case '14:00-14:30':
+            case '14:00:00-14:30:00':
                 $this->Appointment->id_creneaux = 3;
                 break;
-            case '15:00-15:30':
+            case '15:00:00-15:30:00':
                 $this->Appointment->id_creneaux = 4;
                 break;
-            case '16:00-16:30':
+            case '16:00:00-16:30:00':
                 $this->Appointment->id_creneaux = 5;
                 break;
         }
 
         $this->Appointment->id_client =  $this->Appointment->getIdClientFromToken();
-        // $this->chekTime = $this->Appointment->checkTimes();
 
         // Create Appointment
         if ($this->chekToken) {
-            // if ($this->chekTime === 0) {
-            // if (true) {
+
             if ($this->Appointment->create()) {
                 echo json_encode(
                     array('message' => 'Appointment Created')
@@ -133,11 +103,6 @@ class appointmentController
                     array('message' => 'Appointment Not Created')
                 );
             }
-            // } else {
-            //     echo json_encode(
-            //         array('message' => 'Appointment Already Taken')
-            //     );
-            // }
         } else {
             echo json_encode(
                 array('message' => 'Token Not Valid')
