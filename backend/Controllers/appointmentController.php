@@ -13,6 +13,7 @@ class appointmentController
     private $db;
     private $Appointment;
     private $chekToken;
+    private $chekTime;
 
     // Get raw posted data
 
@@ -27,9 +28,34 @@ class appointmentController
         $this->data  = json_decode(file_get_contents("php://input"));
     }
 
-    // public function checkTimes()
-    // {
-    // }
+    public function checkTimes()
+    {
+        //Check  token
+        $this->Appointment->token = $this->data->token;
+        $this->chekToken = $this->Appointment->CheckToken();
+
+        $this->Appointment->date = $this->data->date;
+
+        switch ($this->data->id_creneaux) {
+            case '10:00-10:30':
+                $this->Appointment->id_creneaux = 1;
+                break;
+            case '11:00-11:30':
+                $this->Appointment->id_creneaux = 2;
+                break;
+            case '14:00-14:30':
+                $this->Appointment->id_creneaux = 3;
+                break;
+            case '15:00-15:30':
+                $this->Appointment->id_creneaux = 4;
+                break;
+            case '16:00-16:30':
+                $this->Appointment->id_creneaux = 5;
+                break;
+        }
+        $this->chekTime = $this->Appointment->checkTimes();
+    }
+
     public function availableTimes()
     {
         $this->Appointment->date = $this->data->date;
@@ -72,8 +98,27 @@ class appointmentController
 
         $this->Appointment->date = $this->data->date;
         $this->Appointment->sujet = $this->data->sujet;
-        $this->Appointment->id_creneaux = $this->data->id_creneaux;
-        $this->Appointment->id_client = $this->data->id_client;
+        // $this->Appointment->id_creneaux = $this->data->id_creneaux;
+
+        switch ($this->data->id_creneaux) {
+            case '10:00-10:30':
+                $this->Appointment->id_creneaux = 1;
+                break;
+            case '11:00-11:30':
+                $this->Appointment->id_creneaux = 2;
+                break;
+            case '14:00-14:30':
+                $this->Appointment->id_creneaux = 3;
+                break;
+            case '15:00-15:30':
+                $this->Appointment->id_creneaux = 4;
+                break;
+            case '16:00-16:30':
+                $this->Appointment->id_creneaux = 5;
+                break;
+        }
+
+        $this->Appointment->id_client =  $this->Appointment->getIdClientFromToken();
 
         // Create Appointment
         if ($this->chekToken) {

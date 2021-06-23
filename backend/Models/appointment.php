@@ -20,8 +20,8 @@ class Appointment
     public function checkTimes()
     {
         $stmt  = $this->conn->prepare('SELECT * FROM ' . $this->table . ' WHERE date = :date and id_creneaux:id_creneaux');
-        $stmt->bindValue(':cin', $this->cin, PDO::PARAM_STR);
-        $stmt->bindValue(':cin', $this->id_creneaux, PDO::PARAM_INT);
+        $stmt->bindValue(':date', $this->date, PDO::PARAM_STR);
+        $stmt->bindValue(':id_creneaux', $this->id_creneaux, PDO::PARAM_INT);
         $stmt->execute();
         $RowCount = $stmt->rowCount();
         return  $RowCount;
@@ -43,8 +43,14 @@ class Appointment
         $stmt->bindValue(':token', $this->token, PDO::PARAM_STR);
         // Execute query
         $stmt->execute();
+        $num = $stmt->rowCount();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row['id_client'];
+        if ($num > 0) {
+
+            return $row['id_client'];
+        } else {
+            return false;
+        }
     }
 
     // Get appointment
