@@ -1,31 +1,38 @@
 <template>
-  <section>
-    <hgroup>
-      <h2>Welcome back!</h2>
-      <p>Please enter your details to sign into your account</p>
-    </hgroup>
+  <p>{{ newToken }}</p>
 
-    <div class="log-form">
-      <div class="group log-input">
-        <input v-model="token" type="password" placeholder="Enter your Token" />
-      </div>
-
-      <span class="check left-align">
-        <input type="checkbox" />
-        <label>Remember Me</label>
-      </span>
-
-      <a class="right-align" href="#">Forgot Password</a>
-
-      <br /><br />
-
-      <div class="container-log-btn">
-        <button @click="readClient()" name="btn_submit" class="log-form-btn">
-          <span>Login</span>
-        </button>
-      </div>
+  <div class="log-form">
+    <div class="group log-input">
+      <input v-model="nom_client" type="text" placeholder="nom client" />
     </div>
-  </section>
+    <div class="group log-input">
+      <input v-model="prenom_client" type="text" placeholder="prenom client" />
+    </div>
+    <div class="group log-input">
+      <input v-model="profession" type="text" placeholder="profession" />
+    </div>
+    <div class="group log-input">
+      <input v-model="age_client" type="text" placeholder="age client" />
+    </div>
+    <div class="group log-input">
+      <input v-model="cin" type="text" placeholder="cin" />
+    </div>
+
+    <span class="check left-align">
+      <input type="checkbox" />
+      <label>Remember Me</label>
+    </span>
+
+    <a class="right-align" href="#">Singup</a>
+
+    <br /><br />
+
+    <div class="container-log-btn">
+      <button @click="createClient()" name="btn_submit" class="log-form-btn">
+        <span>Singup</span>
+      </button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -47,27 +54,26 @@ export default {
   },
 
   methods: {
-    readClient: async function () {
+    createClient: async function () {
       let res = await fetch(
-        "http://localhost/avocat_reservation/backend/user/getSingleClient",
+        "http://localhost/avocat_reservation/backend/user/createUser",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            token: this.token,
+            nom_client: this.nom_client,
+            prenom_client: this.prenom_client,
+            profession: this.profession,
+            age_client: this.age_client,
+            cin: this.cin,
           }),
         }
       );
       let data = await res.json();
       console.log(data);
-      this.name = data[0].nom_client;
-      sessionStorage.setItem("token", this.token);
-
-      this.$router.push({ name: "Booking", params: { name: this.name } });
-
-      return this.name;
+      this.newToken = data.message;
     },
   },
   beforeMount() {
@@ -77,6 +83,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 * {
@@ -231,8 +238,9 @@ input[type="password"],
 input[type="date"],
 textarea,
 select {
-  background: transparent;
   border: none;
+  border-radius: none;
+  background: transparent;
   font-family: "Montserrat";
   font-size: 12px;
   font-weight: 400;

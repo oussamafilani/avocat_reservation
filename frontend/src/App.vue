@@ -1,15 +1,15 @@
 <template>
-<TheNavigation/>
-  <router-view/>
+  <TheNavigation />
+  <router-view />
 </template>
 <script>
-import TheNavigation from '@/components/TheNavigation.vue'
+import TheNavigation from "@/components/TheNavigation.vue";
 
-export default{
-  components:{
-    TheNavigation
-  }
-}
+export default {
+  components: {
+    TheNavigation,
+  },
+};
 </script>
 
 <style>
@@ -20,5 +20,4 @@ export default{
   text-align: center;
   color: #2c3e50;
 }
-
 </style>

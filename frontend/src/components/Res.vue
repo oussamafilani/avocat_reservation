@@ -7,7 +7,12 @@
 
     <div class="log-form">
       <div class="group log-input">
-        <input v-model="token" type="password" placeholder="Enter your Token" />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter your Token"
+        />
       </div>
 
       <span class="check left-align">
@@ -20,7 +25,7 @@
       <br /><br />
 
       <div class="container-log-btn">
-        <button @click="readClient()" name="btn_submit" class="log-form-btn">
+        <button type="submit" name="btn_submit" class="log-form-btn">
           <span>Login</span>
         </button>
       </div>
@@ -30,55 +35,22 @@
 
 <script>
 export default {
-  components: {},
-  props: ["name"],
-
+  name: "r",
   data() {
     return {
-      name: "",
-      token: "",
-      nom_client: "",
-      prenom_client: "",
-      profession: "",
-      age_client: "",
-      cin: "",
-      newToken: "",
+      sujet: "",
+      date: "",
     };
   },
-
   methods: {
-    readClient: async function () {
-      let res = await fetch(
-        "http://localhost/avocat_reservation/backend/user/getSingleClient",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token: this.token,
-          }),
-        }
-      );
-      let data = await res.json();
-      console.log(data);
-      this.name = data[0].nom_client;
-      sessionStorage.setItem("token", this.token);
-
-      this.$router.push({ name: "Booking", params: { name: this.name } });
-
-      return this.name;
+    handleSubmit() {
+      console.log("form submitted");
     },
-  },
-  beforeMount() {
-    if (sessionStorage.getItem("token")) {
-      this.$router.push({ name: "Booking" });
-    }
   },
 };
 </script>
 
-<style scoped>
+<style>
 * {
   box-sizing: border-box;
 }

@@ -1,5 +1,10 @@
-<template>
-  <div class="Historique">
-    <h1>This is an Historique page</h1>
-  </div>
-</template>
+<template></template>
+
+<script>
+// @ is an alias to /src
+
+export default {
+  name: "Reservation",
+  components: {},
+};
+</script>

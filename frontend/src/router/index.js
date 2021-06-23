@@ -19,9 +19,14 @@ const routes = [
   },
   {
     path:'/booking',
-    name:'booking',
+    name:'Booking',
     component: () => import(/* webpackChunkName: "brazil" */'../views/Booking.vue')
-  }
+  },
+  {
+    path:'/singup',
+    name:'Singup',
+    component: () => import(/* webpackChunkName: "brazil" */'../views/Singup.vue')
+  },
 ]
 
 const router = createRouter({
