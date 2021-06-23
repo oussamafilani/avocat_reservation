@@ -17,15 +17,15 @@ class Appointment
         $this->conn = $db;
     }
 
-    public function checkTimes()
-    {
-        $stmt  = $this->conn->prepare('SELECT * FROM ' . $this->table . ' WHERE date = :date and id_creneaux:id_creneaux');
-        $stmt->bindValue(':date', $this->date, PDO::PARAM_STR);
-        $stmt->bindValue(':id_creneaux', $this->id_creneaux, PDO::PARAM_INT);
-        $stmt->execute();
-        $RowCount = $stmt->rowCount();
-        return  $RowCount;
-    }
+    // public function checkTimes()
+    // {
+    //     $stmt  = $this->conn->prepare("SELECT * FROM appointment WHERE date = :date and id_creneaux=:id_creneaux");
+    //     $stmt->bindValue(':date', $this->date, PDO::PARAM_STR);
+    //     $stmt->bindValue(':id_creneaux', $this->id_creneaux, PDO::PARAM_INT);
+    //     $stmt->execute();
+    //     $RowCount = $stmt->rowCount();
+    //     return  $RowCount;
+    // }
     public function availableTimes()
     {
 
@@ -135,7 +135,6 @@ class Appointment
     // Update Appointment
     public function update()
     {
-
 
         // Create query
         $query = 'UPDATE ' . $this->table . '

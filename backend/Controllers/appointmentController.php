@@ -53,7 +53,7 @@ class appointmentController
                 $this->Appointment->id_creneaux = 5;
                 break;
         }
-        $this->chekTime = $this->Appointment->checkTimes();
+        // $this->chekTime = $this->Appointment->checkTimes();
     }
 
     public function availableTimes()
@@ -91,7 +91,6 @@ class appointmentController
 
     public function createAppointment()
     {
-
         //Check  token
         $this->Appointment->token = $this->data->token;
         $this->chekToken = $this->Appointment->CheckToken();
@@ -119,9 +118,12 @@ class appointmentController
         }
 
         $this->Appointment->id_client =  $this->Appointment->getIdClientFromToken();
+        // $this->chekTime = $this->Appointment->checkTimes();
 
         // Create Appointment
         if ($this->chekToken) {
+            // if ($this->chekTime === 0) {
+            // if (true) {
             if ($this->Appointment->create()) {
                 echo json_encode(
                     array('message' => 'Appointment Created')
@@ -131,6 +133,11 @@ class appointmentController
                     array('message' => 'Appointment Not Created')
                 );
             }
+            // } else {
+            //     echo json_encode(
+            //         array('message' => 'Appointment Already Taken')
+            //     );
+            // }
         } else {
             echo json_encode(
                 array('message' => 'Token Not Valid')
