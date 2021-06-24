@@ -22,6 +22,7 @@
           </option>
         </select>
       </div>
+      {{ id_creneaux }}
       <div class="group log-input">
         <textarea v-model="sujet" placeholder="sujet"></textarea>
       </div>
@@ -39,6 +40,42 @@
       </div>
     </div>
   </div>
+  <!-- date/sujet/creneu/delete/updatee -->
+  <!-- Start Appointment table -->
+  <table style="overflow-x: auto">
+    <caption>
+      Liste des Appointment
+    </caption>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Sujet</th>
+        <th>Creneau</th>
+
+        <th>Modifier</th>
+        <th>Supprimer</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="item in Appointment" :key="item">
+        <td>{{ item.date }}</td>
+        <td>{{ item.sujet }}</td>
+        <td>{{ item.id_creneaux }}</td>
+
+        <td data-column="Modifier">
+          <button name="modifier">
+            <i class="fas fa-edit table-edit-icon"></i>
+          </button>
+        </td>
+        <td data-column="Supprimer">
+          <button name="supprimer">
+            <i class="fas fa-trash table-trash-icon"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- end  Appointment table -->
 </template>
 
 <script>
@@ -52,6 +89,7 @@ export default {
       id_creneaux: "",
       sujet: "",
       AvailableTime: "",
+      Appointment: "",
     };
   },
   computed: {},
@@ -90,14 +128,49 @@ export default {
       );
       let data = await res.json();
       console.log(data);
-      this.AvailableTime = "";
+      this.getClientAppointment();
       // this.name = data[0].nom_client;
       // return this.name;
+    },
+    getClientAppointment: async function () {
+      let res = await fetch(
+        "http://localhost/avocat_reservation/backend/appointment/getClientAppointment",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: sessionStorage.getItem("token"),
+          }),
+        }
+      );
+      let data = await res.json();
+      console.log(data);
+      this.Appointment = data;
+    },
+    deleteAppointment: async function (idrdv) {
+      let Api =
+        "http://localhost/avocat_reservation/backend/appointment/deleteAppointment";
+      const params = {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          token: sessionStorage.getItem("token"),
+          id_appointment: "",
+        }),
+      };
+      let res = await fetch(Api, params);
+      let data = await res.json();
+      console.log(data);
     },
     logout: function () {
       sessionStorage.removeItem("token");
       this.$router.push({ name: "Home" });
     },
+  },
+  beforeMount() {
+    this.getClientAppointment();
   },
 };
 </script>
@@ -282,5 +355,51 @@ input[type="checkbox"]:checked + label {
   padding-top: 6px;
   position: relative;
   text-transform: uppercase;
+}
+
+/* table style */
+
+table {
+  width: 60%;
+  border-collapse: collapse;
+  margin: 50px auto;
+}
+
+table caption {
+  font-size: 1.5em;
+  margin: 0.5em 0 0.75em;
+}
+
+/* Zebra striping */
+tr:nth-of-type(odd) {
+  background: #eee;
+}
+
+th {
+  background: var(--first-color);
+  color: #000;
+  font-weight: bold;
+  background: #b8b8c0;
+}
+
+td,
+th {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+  font-size: 16px;
+}
+
+tr,
+td {
+  text-align: center;
+}
+
+.table-edit-icon {
+  cursor: pointer;
+}
+
+.table-trash-icon {
+  cursor: pointer;
 }
 </style>
