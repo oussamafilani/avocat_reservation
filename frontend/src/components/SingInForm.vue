@@ -8,10 +8,17 @@
     <div class="log-form">
       <div class="group log-input">
         <input
-          type="password"
-          id="password"
-          name="password"
+          v-if="!token"
+          type="text"
           placeholder="Enter your Token"
+          v-model="token"
+        />
+
+        <input
+          v-else-if="token"
+          type="text"
+          placeholder="Enter your Token"
+          :value="token"
         />
       </div>
 
@@ -25,7 +32,7 @@
       <br /><br />
 
       <div class="container-log-btn">
-        <button type="submit" name="btn_submit" class="log-form-btn">
+        <button @click="readClient()" name="btn_submit" class="log-form-btn">
           <span>Login</span>
         </button>
       </div>
@@ -35,22 +42,54 @@
 
 <script>
 export default {
-  name: "r",
+  components: {},
+  props: ["name"],
+
   data() {
     return {
-      sujet: "",
-      date: "",
+      name: "",
+      token: this.$route.params.token,
+      nom_client: "",
+      prenom_client: "",
+      profession: "",
+      age_client: "",
+      cin: "",
     };
   },
+
   methods: {
-    handleSubmit() {
-      console.log("form submitted");
+    readClient: async function () {
+      let res = await fetch(
+        "http://localhost/avocat_reservation/backend/user/getSingleClient",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: this.token,
+          }),
+        }
+      );
+      let data = await res.json();
+      console.log(data);
+      this.name = data[0].nom_client;
+      sessionStorage.setItem("token", this.token);
+
+      this.$router.push({ name: "Booking", params: { name: this.name } });
+
+      return this.name;
     },
+  },
+  beforeMount() {
+    if (sessionStorage.getItem("token")) {
+      this.$router.push({ name: "Booking" });
+    }
   },
 };
 </script>
 
-<style>
+<style scoped>
 * {
   box-sizing: border-box;
 }
