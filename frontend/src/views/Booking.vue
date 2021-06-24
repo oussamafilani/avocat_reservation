@@ -35,7 +35,7 @@
         </button>
       </div>
       <div class="container-log-btn" v-else-if="hundelButton">
-        <button @click="updateAppointment()" class="log-form-btn">
+        <button @click="updateAppointment(idrdv)" class="log-form-btn">
           <span>Update</span>
         </button>
       </div>
@@ -100,6 +100,7 @@ export default {
       AvailableTime: "",
       Appointment: "",
       hundelButton: false,
+      idrdv: "",
     };
   },
   computed: {},
@@ -192,6 +193,7 @@ export default {
       this.id_creneaux = data.id_creneaux;
       this.sujet = data.sujet;
       this.hundelButton = true;
+      this.idrdv = idrdv;
       // this.getClientAppointment();
     },
     updateAppointment: async function (idrdv) {
@@ -211,6 +213,7 @@ export default {
       let res = await fetch(Api, params);
       let data = await res.json();
       console.log(data);
+      this.hundelButton = false;
       this.getClientAppointment();
     },
     logout: function () {
