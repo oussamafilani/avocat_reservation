@@ -7,7 +7,19 @@
 
     <div class="log-form">
       <div class="group log-input">
-        <input v-model="token" type="password" placeholder="Enter your Token" />
+        <input
+          v-if="!token"
+          type="text"
+          placeholder="Enter your Token"
+          v-model="token"
+        />
+
+        <input
+          v-else-if="token"
+          type="text"
+          placeholder="Enter your Token"
+          :value="token"
+        />
       </div>
 
       <span class="check left-align">
@@ -36,13 +48,12 @@ export default {
   data() {
     return {
       name: "",
-      token: "",
+      token: this.$route.params.token,
       nom_client: "",
       prenom_client: "",
       profession: "",
       age_client: "",
       cin: "",
-      newToken: "",
     };
   },
 

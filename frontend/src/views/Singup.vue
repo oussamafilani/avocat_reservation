@@ -74,6 +74,7 @@ export default {
       let data = await res.json();
       console.log(data);
       this.newToken = data.message;
+      this.$router.push({ name: "Home", params: { token: this.newToken } });
     },
   },
   beforeMount() {
