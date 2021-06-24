@@ -68,7 +68,10 @@
           </button>
         </td>
         <td data-column="Supprimer">
-          <button name="supprimer">
+          <button
+            name="supprimer"
+            @click="deleteAppointment(item.id_appointment)"
+          >
             <i class="fas fa-trash table-trash-icon"></i>
           </button>
         </td>
@@ -157,12 +160,13 @@ export default {
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({
           token: sessionStorage.getItem("token"),
-          id_appointment: "",
+          id_appointment: idrdv,
         }),
       };
       let res = await fetch(Api, params);
       let data = await res.json();
       console.log(data);
+      this.getClientAppointment();
     },
     logout: function () {
       sessionStorage.removeItem("token");
