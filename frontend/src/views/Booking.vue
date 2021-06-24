@@ -2,7 +2,12 @@
   <div class="Booking">
     <h1>This is an Booking page</h1>
     <p>{{ name }}</p>
-    <button @click="logout()">logout</button>
+
+    <div class="container-log-btn">
+      <button @click="logout()" class="log-form-btn">
+        <span>Logout</span>
+      </button>
+    </div>
     <br />
 
     <div class="log-form">
@@ -188,12 +193,16 @@ export default {
       };
       let res = await fetch(Api, params);
       let [data] = await res.json();
-      console.log(data.id_appointment);
-      this.data = data.id_appointment;
+      this.date = data.date;
       this.id_creneaux = data.id_creneaux;
       this.sujet = data.sujet;
       this.hundelButton = true;
       this.idrdv = idrdv;
+
+      console.log(this.idrdv);
+      console.log(this.date);
+      console.log(this.id_creneaux);
+      console.log(this.sujet);
       // this.getClientAppointment();
     },
     updateAppointment: async function (idrdv) {
