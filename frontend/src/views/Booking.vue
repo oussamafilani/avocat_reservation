@@ -21,8 +21,8 @@
             {{ item.d_hour }}
           </option>
         </select>
+        <!-- <p>{{ id_creneaux }}</p> -->
       </div>
-      {{ id_creneaux }}
       <div class="group log-input">
         <textarea v-model="sujet" placeholder="sujet"></textarea>
       </div>
@@ -30,11 +30,7 @@
       <br />
 
       <div class="container-log-btn">
-        <button
-          @click="createAppointment()"
-          name="btn_submit"
-          class="log-form-btn"
-        >
+        <button @click="createAppointment()" class="log-form-btn">
           <span>Book</span>
         </button>
       </div>
@@ -48,6 +44,7 @@
     </caption>
     <thead>
       <tr>
+        <th>id appointment</th>
         <th>Date</th>
         <th>Sujet</th>
         <th>Creneau</th>
@@ -58,12 +55,16 @@
     </thead>
     <tbody>
       <tr v-for="item in Appointment" :key="item">
+        <td>{{ item.id_appointment }}</td>
         <td>{{ item.date }}</td>
         <td>{{ item.sujet }}</td>
         <td>{{ item.id_creneaux }}</td>
 
         <td data-column="Modifier">
-          <button name="modifier">
+          <button
+            name="modifier"
+            @click="updateAppointment(item.id_appointment)"
+          >
             <i class="fas fa-edit table-edit-icon"></i>
           </button>
         </td>
@@ -131,9 +132,8 @@ export default {
       );
       let data = await res.json();
       console.log(data);
+      this.getAvailableTime();
       this.getClientAppointment();
-      // this.name = data[0].nom_client;
-      // return this.name;
     },
     getClientAppointment: async function () {
       let res = await fetch(
@@ -161,6 +161,25 @@ export default {
         body: JSON.stringify({
           token: sessionStorage.getItem("token"),
           id_appointment: idrdv,
+        }),
+      };
+      let res = await fetch(Api, params);
+      let data = await res.json();
+      console.log(data);
+      this.getClientAppointment();
+    },
+    updateAppointment: async function (idrdv) {
+      let Api =
+        "http://localhost/avocat_reservation/backend/appointment/updateAppointment";
+      const params = {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          token: sessionStorage.getItem("token"),
+          id_appointment: idrdv,
+          date: this.data,
+          sujet: this.sujet,
+          id_creneaux: this.id_creneaux,
         }),
       };
       let res = await fetch(Api, params);
