@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -55,24 +57,20 @@ export default {
   computed: {},
   methods: {
     getAvailableTime: async function () {
-      let res = await fetch(
-        "http://localhost/avocat_reservation/backend/appointment/availableTimes",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+      try {
+        let res = await axios.post(
+          "http://localhost/avocat_reservation/backend/appointment/availableTimes",
+          {
             token: sessionStorage.getItem("token"),
             date: this.date,
-          }),
-        }
-      );
-      let data = await res.json();
-      console.log(data);
-      // console.log(data[0].d_hour);
-      this.AvailableTime = data;
-      // return this.name;
+          }
+        );
+
+        console.log(res.data);
+        this.AvailableTime = res.data;
+      } catch (e) {
+        console.log(e);
+      }
     },
     createAppointment: async function () {
       let res = await fetch(
