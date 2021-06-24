@@ -34,6 +34,11 @@
           <span>Book</span>
         </button>
       </div>
+      <div class="container-log-btn">
+        <button @click="updateAppointment()" class="log-form-btn">
+          <span>Update</span>
+        </button>
+      </div>
     </div>
   </div>
   <!-- date/sujet/creneu/delete/updatee -->
@@ -63,7 +68,7 @@
         <td data-column="Modifier">
           <button
             name="modifier"
-            @click="updateAppointment(item.id_appointment)"
+            @click="getSingelAppointment(item.id_appointment)"
           >
             <i class="fas fa-edit table-edit-icon"></i>
           </button>
@@ -149,7 +154,7 @@ export default {
         }
       );
       let data = await res.json();
-      console.log(data);
+      // console.log(data);
       this.Appointment = data;
     },
     deleteAppointment: async function (idrdv) {
@@ -167,6 +172,25 @@ export default {
       let data = await res.json();
       console.log(data);
       this.getClientAppointment();
+    },
+    getSingelAppointment: async function (idrdv) {
+      let Api =
+        "http://localhost/avocat_reservation/backend/appointment/getSingelAppointment";
+      const params = {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          token: sessionStorage.getItem("token"),
+          id_appointment: idrdv,
+        }),
+      };
+      let res = await fetch(Api, params);
+      let [data] = await res.json();
+      console.log(data.id_appointment);
+      this.data = data.id_appointment;
+      this.id_creneaux = data.id_creneaux;
+      this.sujet = data.sujet;
+      // this.getClientAppointment();
     },
     updateAppointment: async function (idrdv) {
       let Api =
