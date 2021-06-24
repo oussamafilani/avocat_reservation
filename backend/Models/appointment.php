@@ -87,7 +87,7 @@ class Appointment
         // }
     }
 
-    // Get Single Appointment
+    // Get Appointment Client
     public function getClientAppointment()
     {
         // Create query
@@ -98,6 +98,23 @@ class Appointment
 
         // Bind ID
         $stmt->bindParam(1, $this->id_client);
+
+        // Execute query
+        $stmt->execute();
+
+        return $stmt;
+    }
+    // Get Appointment Client
+    public function getSingelAppointment()
+    {
+        // Create query
+        $query = 'SELECT * FROM ' . $this->table . '  WHERE appointment.id_appointment = ?';
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Bind ID
+        $stmt->bindParam(1, $this->id_appointment);
 
         // Execute query
         $stmt->execute();
