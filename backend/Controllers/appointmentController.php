@@ -72,7 +72,7 @@ class appointmentController
         $this->Appointment->sujet = $this->data->sujet;
 
         switch ($this->data->id_creneaux) {
-            case '10:00:00--10:30:00-':
+            case '10:00:00-10:30:00':
                 $this->Appointment->id_creneaux = 1;
                 break;
             case '11:00:00-11:30:00':
@@ -162,6 +162,24 @@ class appointmentController
                 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                     extract($row);
 
+                    switch ($id_creneaux) {
+                        case 1:
+                            $id_creneaux = '10:00:00-10:30:00';
+                            break;
+                        case 2:
+                            $id_creneaux = '11:00:00-11:30:00';
+                            break;
+                        case 3:
+                            $id_creneaux = '14:00:00-14:30:00';
+                            break;
+                        case 4:
+                            $id_creneaux = '15:00:00-15:30:00';
+                            break;
+                        case 5:
+                            $id_creneaux = '16:00:00-16:30:00';
+                            break;
+                    }
+
                     $post_item = array(
                         'id_appointment' => $id_appointment,
                         'date' => $date,
@@ -240,7 +258,23 @@ class appointmentController
         // $Appointment->token = $data->token;
         $this->Appointment->date = $this->data->date;
         $this->Appointment->sujet = $this->data->sujet;
-        $this->Appointment->id_creneaux = $this->data->id_creneaux;
+        switch ($this->data->id_creneaux) {
+            case '10:00:00-10:30:00':
+                $this->Appointment->id_creneaux = 1;
+                break;
+            case '11:00:00-11:30:00':
+                $this->Appointment->id_creneaux = 2;
+                break;
+            case '14:00:00-14:30:00':
+                $this->Appointment->id_creneaux = 3;
+                break;
+            case '15:00:00-15:30:00':
+                $this->Appointment->id_creneaux = 4;
+                break;
+            case '16:00:00-16:30:00':
+                $this->Appointment->id_creneaux = 5;
+                break;
+        }
 
         // Update post
         if ($chekToken) {
