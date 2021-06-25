@@ -1,7 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 
-// LinkExactActiveClass:'vue-school-active-class',
 const routes = [
 
   {

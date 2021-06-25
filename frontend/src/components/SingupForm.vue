@@ -1,6 +1,8 @@
 <template>
   <p>{{ newToken }}</p>
 
+  <router-link to="/">Singin</router-link>
+
   <div class="log-form">
     <div class="group log-input">
       <input v-model="nom_client" type="text" placeholder="nom client" />

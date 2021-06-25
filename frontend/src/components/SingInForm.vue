@@ -3,6 +3,7 @@
     <hgroup>
       <h2>Welcome back!</h2>
       <p>Please enter your details to sign into your account</p>
+      <router-link to="/singup">Sing Up</router-link>
     </hgroup>
 
     <div class="log-form">

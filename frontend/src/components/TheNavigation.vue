@@ -2,7 +2,6 @@
   <div id="nav">
     <router-link to="/">Home</router-link>
     <router-link to="/booking">Booking</router-link>
-    <router-link to="/historique">Historique</router-link>
   </div>
 </template>
 
