@@ -48,7 +48,7 @@
   </div>
   <!-- date/sujet/creneu/delete/updatee -->
   <!-- Start Appointment table -->
-  <table style="overflow-x: auto">
+  <table style="overflow-x: auto" v-if="hundeltable">
     <caption>
       Liste des Appointment
     </caption>
@@ -105,6 +105,7 @@ export default {
       AvailableTime: "",
       Appointment: "",
       hundelButton: false,
+      hundeltable: "",
       idrdv: "",
     };
   },
@@ -161,7 +162,8 @@ export default {
         }
       );
       let data = await res.json();
-      // console.log(data);
+      // console.log(data.message);
+      this.hundeltable = data.message != "No Appointment Found" ? true : false;
       this.Appointment = data;
     },
     deleteAppointment: async function (idrdv) {
