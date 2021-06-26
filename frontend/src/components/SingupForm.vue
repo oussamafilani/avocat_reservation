@@ -24,9 +24,7 @@
       <input type="checkbox" />
       <label>Remember Me</label>
     </span>
-
-    <a class="right-align" href="#">Singup</a>
-
+    <router-link class="right-align" to="/">Singin</router-link>
     <br /><br />
 
     <div class="container-log-btn">
