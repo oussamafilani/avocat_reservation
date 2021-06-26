@@ -1,7 +1,7 @@
 <template>
   <div class="Booking">
     <h1>This is an Booking page</h1>
-    <p>{{ name }}</p>
+    <p v-if="name">{{ "Welcome " + name }}</p>
 
     <div class="container-log-btn">
       <button @click="logout()" class="log-form-btn">
