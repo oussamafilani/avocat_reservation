@@ -11,7 +11,16 @@ const routes = [
   {
     path:'/booking',
     name:'Booking',
-    component: () => import(/* webpackChunkName: "brazil" */'../views/Booking.vue')
+    component: () => import(/* webpackChunkName: "brazil" */'../views/Booking.vue'),
+    beforeEnter: (to, from, next) => {
+      if (sessionStorage.getItem("token")) {
+        next();
+      } else {
+        next({
+          name: "Home",
+        });
+      }
+    },
   },
   {
     path:'/singup',

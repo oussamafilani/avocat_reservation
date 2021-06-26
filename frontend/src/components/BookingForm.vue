@@ -239,19 +239,7 @@ export default {
   },
   beforeMount() {
     this.getClientAppointment();
-    if (!sessionStorage.getItem("token")) {
-      this.$router.push({ name: "Home" });
-    }
   },
-  //   beforeEnter: (to, from, next) => {
-  //     if (sessionStorage.getItem("token")) {
-  //       next({
-  //         name: "Booking",
-  //       });
-  //     } else {
-  //       next();
-  //     }
-  //   },
 };
 </script>
 
