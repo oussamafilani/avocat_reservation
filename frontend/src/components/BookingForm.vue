@@ -224,6 +224,11 @@ export default {
       let res = await fetch(Api, params);
       let data = await res.json();
       console.log(data);
+
+      this.date = "";
+      this.id_creneaux = "";
+      this.sujet = "";
+
       this.hundelButton = false;
       this.getClientAppointment();
     },
