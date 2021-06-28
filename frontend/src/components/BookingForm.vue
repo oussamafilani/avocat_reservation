@@ -164,6 +164,9 @@ export default {
       let data = await res.json();
       // console.log(data.message);
       this.hundeltable = data.message != "No Appointment Found" ? true : false;
+      if (data.message == "Token Not Valid") {
+        this.logout();
+      }
       this.Appointment = data;
     },
     deleteAppointment: async function (idrdv) {
