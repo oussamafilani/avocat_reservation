@@ -1,7 +1,7 @@
-<template>
+<template >
   <div id="nav">
     <router-link to="/">Home</router-link>
-    <router-link to="/booking">{{ hundler }}</router-link>
+    <router-link v-if="stateRoute" to="/booking">{{ hundler }}</router-link>
   </div>
 </template>
 
@@ -9,6 +9,13 @@
 export default {
   props: {
     hundler: String,
+    stateRoute: Boolean,
+  },
+  updated() {
+    if (!sessionStorage.getItem("token")) {
+      hundler = "";
+      stateRoute = false;
+    }
   },
 };
 </script>

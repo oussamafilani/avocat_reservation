@@ -1,6 +1,6 @@
 <template>
   <div id="nav">
-    <TheNavigation :hundler="hundler" />
+    <TheNavigation :hundler="hundler" :stateRoute="stateRoute" />
   </div>
   <router-view />
 </template>
@@ -14,15 +14,23 @@ export default {
   },
   data() {
     return {
-      hundler: "Booking",
+      hundler: "booking",
+      stateRoute: true,
     };
   },
   methods: {
     hundlerouter: function () {
       if (!sessionStorage.getItem("token")) {
         this.hundler = "";
+        this.stateRoute = false;
       }
     },
+  },
+  updated() {
+    if (!sessionStorage.getItem("token")) {
+      this.hundler = "";
+      this.stateRoute = false;
+    }
   },
   beforeMount() {
     this.hundlerouter();
