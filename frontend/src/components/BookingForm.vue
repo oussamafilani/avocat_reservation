@@ -109,7 +109,7 @@ export default {
       idrdv: "",
     };
   },
-  computed: {},
+
   methods: {
     getAvailableTime: async function () {
       try {
@@ -167,6 +167,7 @@ export default {
       if (data.message == "Token Not Valid") {
         this.logout();
       }
+
       this.Appointment = data;
     },
     deleteAppointment: async function (idrdv) {

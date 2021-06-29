@@ -1,6 +1,6 @@
 <template>
   <div id="nav">
-    <TheNavigation />
+    <TheNavigation :hundler="hundler" />
   </div>
   <router-view />
 </template>
@@ -11,6 +11,21 @@ import TheNavigation from "@/components/TheNavigation.vue";
 export default {
   components: {
     TheNavigation,
+  },
+  data() {
+    return {
+      hundler: "Booking",
+    };
+  },
+  methods: {
+    hundlerouter: function () {
+      if (!sessionStorage.getItem("token")) {
+        this.hundler = "";
+      }
+    },
+  },
+  beforeMount() {
+    this.hundlerouter();
   },
 };
 </script>

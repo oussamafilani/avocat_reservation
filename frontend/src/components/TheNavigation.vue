@@ -1,9 +1,17 @@
 <template>
   <div id="nav">
     <router-link to="/">Home</router-link>
-    <router-link to="/booking">Booking</router-link>
+    <router-link to="/booking">{{ hundler }}</router-link>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    hundler: String,
+  },
+};
+</script>
 
 <style scoped>
 #nav {
