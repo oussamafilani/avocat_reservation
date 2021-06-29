@@ -18,14 +18,7 @@ export default {
       stateRoute: true,
     };
   },
-  methods: {
-    hundlerouter: function () {
-      if (!sessionStorage.getItem("token")) {
-        this.hundler = "";
-        this.stateRoute = false;
-      }
-    },
-  },
+
   updated() {
     if (!sessionStorage.getItem("token")) {
       this.hundler = "";
@@ -33,7 +26,10 @@ export default {
     }
   },
   beforeMount() {
-    this.hundlerouter();
+    if (!sessionStorage.getItem("token")) {
+      this.hundler = "";
+      this.stateRoute = false;
+    }
   },
 };
 </script>

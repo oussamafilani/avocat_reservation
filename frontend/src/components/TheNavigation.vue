@@ -11,12 +11,6 @@ export default {
     hundler: String,
     stateRoute: Boolean,
   },
-  updated() {
-    if (!sessionStorage.getItem("token")) {
-      hundler = "";
-      stateRoute = false;
-    }
-  },
 };
 </script>
 
